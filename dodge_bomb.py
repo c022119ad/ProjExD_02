@@ -57,8 +57,8 @@ def main():
     kk_rct.center = 900,400
     bm_rct.centerx = random.randint(0,WIDTH)
     bm_rct.centery = random.randint(0,HEIGHT)
-    vx = 0
-    vy = 0
+    vx = 5
+    vy = 5
     clock = pg.time.Clock()
     tmr = 0
     
