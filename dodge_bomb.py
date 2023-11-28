@@ -25,6 +25,22 @@ def check_bound(rct:pg.Rect) -> tuple[bool,bool]:
     if rct.top <0 or HEIGHT < rct.bottom:
         tate = False
     return yoko,tate
+def generate_bomb(r=255,g=0,b=0)->tuple[pg.Surface,pg.Rect]:
+    """
+    爆弾の作成と初期設定をする関数
+    同じサイズの爆弾をつくる
+    引数は見分けがつくようにR,G,Bをとる
+    何も渡されていなかったら赤い爆弾を作成
+    戻り値は爆弾Surfaceとそのrect
+    """
+    bm_img = pg.Surface((20,20))
+    pg.draw.circle(bm_img,(r,g,b),(10,10),10)
+    bm_img.set_colorkey((0,0,0))
+    bm_rct = bm_img.get_rect()
+    bm_rct.centerx = random.randint(0,WIDTH)
+    bm_rct.centery = random.randint(0,HEIGHT)
+    
+    return bm_img,bm_rct
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -36,6 +52,7 @@ def main():
     c = 1
     kk_imgs[2]  = pg.transform.flip(kk_imgs[2],True,False) # 左右反転する
     for i in range(1,5):  # 反転したものの、角度調整
+        print(i)
         kk_imgs.append(pg.transform.rotozoom(kk_imgs[2],i*45,1.0))  # 角度調整
     
     kk_imgs.append(pg.transform.rotozoom(kk_img,45*7,1.0))  ## 最後に左上を向いている画像を追加
@@ -51,19 +68,21 @@ def main():
     (-5,-5):kk_imgs[7]
     }
     kk_rct = kk_img.get_rect()  # 練習3 こうかとんSurfaceのrectを抽出
-    bm_img = pg.Surface((20,20))  # 練習1透明のSurfaceを生成
-    pg.draw.circle(bm_img,(255,0,0),(10,10),10)  # 練習1赤い半径の円をdraw
-    bm_img.set_colorkey((0,0,0))
-    bm_rct = bm_img.get_rect()
+    #bm_img = pg.Surface((20,20))  # 練習1透明のSurfaceを生成
+    #pg.draw.circle(bm_img,(255,0,0),(10,10),10)  # 練習1赤い半径の円をdraw
+    #bm_img.set_colorkey((0,0,0))
+    #bm_rct = bm_img.get_rect()
     kk_rct.center = 900,400
-    bm_rct.centerx = random.randint(0,WIDTH)
-    bm_rct.centery = random.randint(0,HEIGHT)
-    bm_img2 = pg.Surface((20,20))
-    pg.draw.circle(bm_img2,(0,0,255),(10,10),10)
-    bm_img2.set_colorkey((0,0,0))
-    bm2_rct = bm_img2.get_rect()
-    bm2_rct.centerx = random.randint(0,WIDTH)
-    bm2_rct.centery = random.randint(0,HEIGHT)
+    #bm_rct.centerx = random.randint(0,WIDTH)
+    #bm_rct.centery = random.randint(0,HEIGHT)
+    bm_img,bm_rct = generate_bomb()
+    #bm_img2 = pg.Surface((20,20))
+    #pg.draw.circle(bm_img2,(0,0,255),(10,10),10)
+    #bm_img2.set_colorkey((0,0,0))
+    #bm2_rct = bm_img2.get_rect()
+    #bm2_rct.centerx = random.randint(0,WIDTH)
+    #bm2_rct.centery = random.randint(0,HEIGHT)
+    bm_img2,bm2_rct = generate_bomb(0,0,255)
     
     font = pg.font.SysFont(None,50)  # 秒数経過を表示する
     font2 = pg.font.SysFont(None,80)
@@ -99,6 +118,8 @@ def main():
             kk_img =kk_ch_dict[kk_key] 
     
         screen.blit(kk_img, kk_rct)
+        
+        
         if stop//60  >=4:  #4秒後に
             bm_rct.move_ip(vx,vy)  # 練習2 爆弾を動かす
             yoko,tate = check_bound(bm_rct)
