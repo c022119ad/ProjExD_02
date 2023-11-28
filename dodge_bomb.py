@@ -18,7 +18,8 @@ def main():
     bm_rct = bm_img.get_rect()
     bm_rct.centerx = random.randint(0,WIDTH)
     bm_rct.centery = random.randint(0,HEIGHT)
-    
+    vx = 5
+    vy = 5
     clock = pg.time.Clock()
     tmr = 0
     
@@ -26,9 +27,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        
+            
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
+        bm_rct.move_ip(vx,vy)  # 練習2 爆弾を動かす
         screen.blit(bm_img,bm_rct)
         
         pg.display.update()
