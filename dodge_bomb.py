@@ -49,6 +49,11 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+            
+        if kk_rct.colliderect(bm_rct):
+            print("game over")
+            return
+        
         key_lst = pg.key.get_pressed()
         summove =[0,0]
         for k,tpl in delta.items():
