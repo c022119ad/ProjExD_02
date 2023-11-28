@@ -31,7 +31,6 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
-    kkniku_img = pg.transform.rotozoom(kkniku_img,0,0.5)
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_imgs = [pg.transform.rotozoom(kk_img,i*45,1.0) for i in range(8)]  #切り替え用に画像をリストを作る
     c = 1
@@ -98,7 +97,7 @@ def main():
         kk_key = tuple(summove)
         if sum(summove) != 0:
             kk_img =kk_ch_dict[kk_key] 
-      
+    
         screen.blit(kk_img, kk_rct)
         #c = 0
         #for k,v in kk_ch_dict.items():
