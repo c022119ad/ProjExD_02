@@ -32,13 +32,14 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
-    kk_imgs = [pg.transform.rotozoom(kk_img,i*45,1.0) for i in range(8)]  #切り替え用に画像をリストを作る
+    kk_imgs = [pg.transform.rotozoom(kk_img,i*45,1.0) for i in range(3)]  #切り替え用に画像をリストを作る
     c = 1
-    kk_imgs[2]  = pg.transform.flip(kk_imgs[2],True,False) #左右反転する
-    for l in range(3,7):
-        
-        kk_imgs[l] = pg.transform.rotozoom(kk_imgs[2],c*45,1.0)  #角度調整
-        c+=1
+    kk_imgs[2]  = pg.transform.flip(kk_imgs[2],True,False) # 左右反転する
+    for i in range(1,5):  # 反転したものの、角度調整
+        kk_imgs.append(pg.transform.rotozoom(kk_imgs[2],i*45,1.0))  # 角度調整
+    
+    kk_imgs.append(pg.transform.rotozoom(kk_img,45*7,1.0))  ## 最後に左上を向いている画像を追加
+
     kk_ch_dict = {
     (-5,0): kk_imgs[0],
     (-5,+5): kk_imgs[1],
@@ -89,7 +90,6 @@ def main():
             if key_lst[k]:  # 矢印キーが押されたら合計移動量を入れる
                 summove[0] += tpl[0]
                 summove[1] += tpl[1]
-        
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(summove[0],summove[1])
         if check_bound(kk_rct) != (True,True):
@@ -99,11 +99,6 @@ def main():
             kk_img =kk_ch_dict[kk_key] 
     
         screen.blit(kk_img, kk_rct)
-        #c = 0
-        #for k,v in kk_ch_dict.items():
-        #   screen.blit(v,(c*100,450))
-        #  c+=1
-        
         if stop//60  >=4:  #4秒後に
             bm_rct.move_ip(vx,vy)  # 練習2 爆弾を動かす
             yoko,tate = check_bound(bm_rct)
