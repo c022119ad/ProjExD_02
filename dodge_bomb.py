@@ -31,6 +31,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
+    kkniku_img = pg.transform.rotozoom(kkniku_img,0,0.5)
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     kk_imgs = [pg.transform.rotozoom(kk_img,i*45,1.0) for i in range(8)]  #切り替え用に画像をリストを作る
     c = 1
@@ -72,7 +73,7 @@ def main():
     vy2 = 5
     clock = pg.time.Clock()
     tmr = 0
-    stop = 0
+    stop = 0  # ゲーム開始しから少しの間は爆弾が動かない
     
     while True:
         for event in pg.event.get():
@@ -97,13 +98,14 @@ def main():
         kk_key = tuple(summove)
         if sum(summove) != 0:
             kk_img =kk_ch_dict[kk_key] 
+      
         screen.blit(kk_img, kk_rct)
         #c = 0
         #for k,v in kk_ch_dict.items():
         #   screen.blit(v,(c*100,450))
         #  c+=1
         
-        if stop//60  >=4:
+        if stop//60  >=4:  #4秒後に
             bm_rct.move_ip(vx,vy)  # 練習2 爆弾を動かす
             yoko,tate = check_bound(bm_rct)
             if not yoko:
@@ -126,7 +128,7 @@ def main():
         
         text = font.render(f"{tmr//60}",True,(0,0,0))  #何秒たっているか書く
         screen.blit(text,(1200,200))
-        if stop//60 <4:
+        if stop//60 <4:  #開始までの秒数カウントをする
             if 3- stop//60 > 0:
                 text2 = font2.render(f"{3-stop//60}",True,(0,0,0))
             else:
@@ -136,7 +138,7 @@ def main():
         
         pg.display.update()
         
-        if stop//60 >=4:
+        if stop//60 >=4:  #4秒たってからゲームのカウントをはじめる
             tmr += 1
         
     
