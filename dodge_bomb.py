@@ -57,17 +57,29 @@ def main():
     kk_rct.center = 900,400
     bm_rct.centerx = random.randint(0,WIDTH)
     bm_rct.centery = random.randint(0,HEIGHT)
+    bm_img2 = pg.Surface((20,20))
+    pg.draw.circle(bm_img2,(0,0,255),(10,10),10)
+    bm_img2.set_colorkey((0,0,0))
+    bm2_rct = bm_img2.get_rect()
+    bm2_rct.centerx = random.randint(0,WIDTH)
+    bm2_rct.centery = random.randint(0,HEIGHT)
+    
+    font = pg.font.SysFont(None,50)  # 秒数経過を表示する
+    font2 = pg.font.SysFont(None,80)
     vx = 5
     vy = 5
+    vx2 = 5
+    vy2 = 5
     clock = pg.time.Clock()
     tmr = 0
+    stop = 0
     
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
             
-        if kk_rct.colliderect(bm_rct):
+        if kk_rct.colliderect(bm_rct) or kk_rct.colliderect(bm2_rct):
             print("game over")
             return
         
@@ -88,21 +100,48 @@ def main():
         screen.blit(kk_img, kk_rct)
         #c = 0
         #for k,v in kk_ch_dict.items():
-         #   screen.blit(v,(c*100,450))
-          #  c+=1
+        #   screen.blit(v,(c*100,450))
+        #  c+=1
         
-        bm_rct.move_ip(vx,vy)  # 練習2 爆弾を動かす
-        yoko,tate = check_bound(bm_rct)
-        if not yoko:
-            vx *= -1
-        if not tate:
-            vy *= -1
-        bm_rct.move_ip(vx,vy)
-                
+        if stop//60  >=4:
+            bm_rct.move_ip(vx,vy)  # 練習2 爆弾を動かす
+            yoko,tate = check_bound(bm_rct)
+            if not yoko:
+                vx *= -1
+            if not tate:
+                vy *= -1
+            bm_rct.move_ip(vx,vy)
         screen.blit(bm_img,bm_rct)
+        if    tmr//60 >= 10:## もし10秒経過したらもう一つ爆弾追加
+            bm2_rct.move_ip(vx2,vy2)
+            yoko,tate = check_bound(bm2_rct)
+            if not yoko:
+                vx2 *=-1
+            if not tate:
+                vy2 *= -1
+            bm2_rct.move_ip(vx2,vy2)
+            
+            screen.blit(bm_img2,bm2_rct)
+        
+        
+        text = font.render(f"{tmr//60}",True,(0,0,0))  #何秒たっているか書く
+        screen.blit(text,(1200,200))
+        if stop//60 <4:
+            if 3- stop//60 > 0:
+                text2 = font2.render(f"{3-stop//60}",True,(0,0,0))
+            else:
+                text2 = font2.render(f"START!",True,(0,0,0))
+            screen.blit(text2,[WIDTH/2,HEIGHT/2])
+        
         
         pg.display.update()
-        tmr += 1
+        
+        if stop//60 >=4:
+            tmr += 1
+        
+    
+        
+        stop += 1
         clock.tick(60)
 
 
